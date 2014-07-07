@@ -15,19 +15,18 @@ db.zips.aggregate([
 
 //Homework 3:  Who's the easiest grader on campus?
 db.grades.aggregate([
-    /*unwind scores*/
+   
     {$unwind: '$scores'},
-    /*match only non-quiz scores*/
+   
     {$match: {'scores.type': {$ne:'quiz'}}},
-    /*group on student and class to get average*/
+   
     {$group:{_id:{'student':'$student_id', 'class':'$class_id'},
-    /*get the average score for each student in each class*/
+   
     student_average:{$avg:'$scores.score'}}},
-    /*now average the classes with the student_average*/
+   
     {$group: {_id:{'class':"$_id.class"}, class_average:{$avg:"$student_average"}}},
-    /*peform a sort to make it easy to read*/
+    
      {$sort: {'class_average':1}}])
-    ])
 
 //Homework 4:  Removing Rural Residents
 db.zips.aggregate([
